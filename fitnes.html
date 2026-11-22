@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Фитнес План</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #17212b; color: #ffffff; margin: 0; padding: 15px; padding-bottom: 80px; }
+        h2 { text-align: center; color: #50a8eb; margin-bottom: 20px; }
+        .tabs { display: flex; margin-bottom: 20px; background: #232e3c; border-radius: 10px; overflow: hidden; }
+        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: bold; color: #8b9eb0; transition: 0.3s; font-size: 14px;}
+        .tab.active { background: #50a8eb; color: white; }
+        .day-content { display: none; }
+        .day-content.active { display: block; }
+        .exercise { background: #232e3c; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .ex-info { flex: 1; padding-right: 10px; }
+        .ex-title { font-weight: bold; font-size: 14px; margin-bottom: 4px; line-height: 1.3;}
+        .ex-target { font-size: 12px; color: #8b9eb0; }
+        .inputs { display: flex; gap: 5px; }
+        input { width: 45px; background: #17212b; border: 1px solid #3e4c5e; color: white; padding: 8px 4px; border-radius: 6px; text-align: center; font-size: 14px; outline: none; }
+        input:focus { border-color: #50a8eb; }
+        
+        .bottom-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #17212b; padding: 15px; border-top: 1px solid #232e3c; display: flex; gap: 10px; }
+        .save-btn { flex: 2; padding: 15px; background: #50a8eb; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .timer-btn { flex: 1; padding: 15px; background: #f39c12; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center;}
+        .save-btn:active { background: #3b82b8; }
+        .timer-btn:active { background: #d68910; }
+        
+        /* Стили для таймера */
+        #timer-display { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #f39c12; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 18px; display: none; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+    </style>
+</head>
+<body>
+
+    <div id="timer-display">01:30</div>
+
+    <h2>🏋️‍♂️ Набор Массы (74 кг)</h2>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('heavy')">Тяжелый (Пн/Чт)</div>
+        <div class="tab" onclick="switchTab('light')">Легкий (Вт/Пт)</div>
+    </div>
+
+    <!-- ТЯЖЕЛЫЙ ДЕНЬ -->
+    <div id="heavy" class="day-content active">
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">1. Гакк-присед</div><div class="ex-target">3х10-12 (старт: 120 кг)</div></div>
+            <div class="inputs"><input type="number" id="h1_w" placeholder="Вес" value="120"><input type="number" id="h1_r" placeholder="Повт" value="10"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">2. Жим на наклонной</div><div class="ex-target">3х10-12 (старт: 42 кг)</div></div>
+            <div class="inputs"><input type="number" id="h2_w" placeholder="Вес" value="42"><input type="number" id="h2_r" placeholder="Повт" value="10"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">3. Тяга верхнего блока</div><div class="ex-target">3х10-12 (старт: 71 кг)</div></div>
+            <div class="inputs"><input type="number" id="h3_w" placeholder="Вес" value="71"><input type="number" id="h3_r" placeholder="Повт" value="10"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">4. Брусья</div><div class="ex-target">3х10-12 (старт: +10 кг)</div></div>
+            <div class="inputs"><input type="number" id="h4_w" placeholder="Вес" value="10"><input type="number" id="h4_r" placeholder="Повт" value="10"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">5. Махи в кроссовере</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs"><input type="number" id="h5_w" placeholder="Вес"><input type="number" id="h5_r" placeholder="Повт" value="15"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">6. Бицепс гантели</div><div class="ex-target">3х10-12 (старт: 14 кг)</div></div>
+            <div class="inputs"><input type="number" id="h6_w" placeholder="Вес" value="14"><input type="number" id="h6_r" placeholder="Повт" value="10"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">7. Гиперэкстензия</div><div class="ex-target">2х15 (старт: 20 кг)</div></div>
+            <div class="inputs"><input type="number" id="h7_w" placeholder="Вес" value="20"><input type="number" id="h7_r" placeholder="Повт" value="15"></div>
+        </div>
+    </div>
+
+    <!-- ЛЕГКИЙ ДЕНЬ -->
+    <div id="light" class="day-content">
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">1. Гиря (рывок/жим)</div><div class="ex-target">3х10-12 на руку (16 кг)</div></div>
+            <div class="inputs"><input type="number" id="l1_w" placeholder="Вес" value="16"><input type="number" id="l1_r" placeholder="Повт" value="12"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">2. Румынская тяга</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs"><input type="number" id="l2_w" placeholder="Вес"><input type="number" id="l2_r" placeholder="Повт" value="12"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">3. Тяга штанги к поясу</div><div class="ex-target">3х12-15 (старт: 30 кг)</div></div>
+            <div class="inputs"><input type="number" id="l3_w" placeholder="Вес" value="30"><input type="number" id="l3_r" placeholder="Повт" value="12"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">4. Бабочка / Отжимания</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs"><input type="number" id="l4_w" placeholder="Вес"><input type="number" id="l4_r" placeholder="Повт" value="12"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">5. Разведения на лопатки</div><div class="ex-target">3х15 (старт: 10 кг)</div></div>
+            <div class="inputs"><input type="number" id="l5_w" placeholder="Вес" value="10"><input type="number" id="l5_r" placeholder="Повт" value="15"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">6. Блин вокруг головы</div><div class="ex-target">3х12-15 (старт: 15 кг)</div></div>
+            <div class="inputs"><input type="number" id="l6_w" placeholder="Вес" value="15"><input type="number" id="l6_r" placeholder="Повт" value="12"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">7. Трицепс на блоке</div><div class="ex-target">3х15</div></div>
+            <div class="inputs"><input type="number" id="l7_w" placeholder="Вес"><input type="number" id="l7_r" placeholder="Повт" value="15"></div>
+        </div>
+        <div class="exercise">
+            <div class="ex-info"><div class="ex-title">8. Пресс</div><div class="ex-target">3х15-20</div></div>
+            <div class="inputs"><input type="number" id="l8_w" placeholder="Вес"><input type="number" id="l8_r" placeholder="Повт" value="15"></div>
+        </div>
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ -->
+    <div class="bottom-panel">
+        <button class="timer-btn" onclick="startTimer(90)">⏱ 1:30</button>
+        <button class="save-btn" onclick="saveData()">💾 Сохранить</button>
+    </div>
+
+    <script>
+        // Переключение вкладок
+        function switchTab(day) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.day-content').forEach(c => c.classList.remove('active'));
+            
+            if(day === 'heavy') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('heavy').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('light').classList.add('active');
+            }
+        }
+
+        // Сохранение данных
+        function saveData() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                if(input.value) {
+                    localStorage.setItem(input.id, input.value);
+                } else {
+                    localStorage.removeItem(input.id);
+                }
+            });
+            alert("Прогресс сохранен! 💪");
+        }
+
+        // Загрузка данных
+        window.onload = function() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                const savedValue = localStorage.getItem(input.id);
+                if(savedValue !== null) {
+                    input.value = savedValue;
+                }
+            });
+        }
+
+        // Таймер отдыха
+        let timerInterval;
+        function startTimer(seconds) {
+            const display = document.getElementById('timer-display');
+            let timeLeft = seconds;
+            
+            clearInterval(timerInterval);
+            display.style.display = 'block';
+            display.style.background = '#f39c12';
+            display.innerText = formatTime(timeLeft);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                display.innerText = formatTime(timeLeft);
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    display.innerText = "ОТДЫХ ОКОНЧЕН!";
+                    display.style.background = '#e74c3c';
+                    // Вибрация для телефона (если поддерживается)
+                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                    
+                    setTimeout(() => {
+                        display.style.display = 'none';
+                    }, 3000);
+                }
+            }, 1000);
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
