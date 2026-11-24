@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Фитнес План</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #17212b; color: #ffffff; margin: 0; padding: 15px; padding-bottom: 80px; }
+        h2 { text-align: center; color: #50a8eb; margin-bottom: 20px; font-size: 20px;}
+        .tabs { display: flex; margin-bottom: 20px; background: #232e3c; border-radius: 10px; overflow: hidden; }
+        .tab { flex: 1; padding: 10px 5px; text-align: center; cursor: pointer; font-weight: bold; color: #8b9eb0; transition: 0.3s; font-size: 13px;}
+        .tab.active { background: #50a8eb; color: white; }
+        .day-content { display: none; }
+        .day-content.active { display: block; }
+        
+        .exercise { background: #232e3c; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; }
+        .ex-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;}
+        .ex-title { font-weight: bold; font-size: 14px; line-height: 1.3;}
+        .ex-target { font-size: 12px; color: #8b9eb0; }
+        
+        .inputs-row { display: flex; gap: 5px; align-items: center; justify-content: space-between; }
+        .weight-input { width: 60px; background: #17212b; border: 1px solid #50a8eb; color: white; padding: 8px; border-radius: 6px; text-align: center; font-size: 14px; outline: none; font-weight: bold;}
+        
+        .reps-group { display: flex; gap: 4px; }
+        .reps-group input { width: 45px; background: #17212b; border: 1px solid #3e4c5e; color: white; padding: 8px 2px; border-radius: 6px; text-align: center; font-size: 14px; outline: none; }
+        .reps-group input:focus { border-color: #50a8eb; }
+        
+        .bottom-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #17212b; padding: 15px; border-top: 1px solid #232e3c; display: flex; gap: 10px; z-index: 10;}
+        .save-btn { flex: 2; padding: 15px; background: #50a8eb; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .timer-btn { flex: 1; padding: 15px; background: #f39c12; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center;}
+        .save-btn:active { background: #3b82b8; }
+        .timer-btn:active { background: #d68910; }
+        
+        #timer-display { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #f39c12; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 18px; display: none; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+
+        .history-card { background: #232e3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .history-date { color: #50a8eb; font-weight: bold; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #3e4c5e; padding-bottom: 5px; }
+        .history-item { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; color: #d1d8e0; border-bottom: 1px solid #1c2531; padding-bottom: 4px;}
+        .history-item span:last-child { font-weight: bold; color: #f39c12; }
+    </style>
+</head>
+<body>
+
+    <div id="timer-display">01:30</div>
+
+    <h2>🏋️‍♂️ Набор Массы (74 кг)</h2>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('heavy')">Тяжелый</div>
+        <div class="tab" onclick="switchTab('light')">Легкий</div>
+        <div class="tab" onclick="switchTab('history')">История</div>
+    </div>
+
+    <!-- ТЯЖЕЛЫЙ ДЕНЬ -->
+    <div id="heavy" class="day-content active">
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">1. Гакк-присед</div><div class="ex-target">3х10-12</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h1_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h1_r1" placeholder="1-й">
+                    <input type="number" id="h1_r2" placeholder="2-й">
+                    <input type="number" id="h1_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">2. Жим на наклонной</div><div class="ex-target">3х10-12</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h2_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h2_r1" placeholder="1-й">
+                    <input type="number" id="h2_r2" placeholder="2-й">
+                    <input type="number" id="h2_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">3. Тяга верхнего блока</div><div class="ex-target">3х10-12</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h3_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h3_r1" placeholder="1-й">
+                    <input type="number" id="h3_r2" placeholder="2-й">
+                    <input type="number" id="h3_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">4. Брусья</div><div class="ex-target">3х10-12</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h4_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h4_r1" placeholder="1-й">
+                    <input type="number" id="h4_r2" placeholder="2-й">
+                    <input type="number" id="h4_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">5. Махи в кроссовере</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h5_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h5_r1" placeholder="1-й">
+                    <input type="number" id="h5_r2" placeholder="2-й">
+                    <input type="number" id="h5_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">6. Бицепс гантели</div><div class="ex-target">3х10-12</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h6_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h6_r1" placeholder="1-й">
+                    <input type="number" id="h6_r2" placeholder="2-й">
+                    <input type="number" id="h6_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">7. Гиперэкстензия</div><div class="ex-target">2х15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="h7_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="h7_r1" placeholder="1-й">
+                    <input type="number" id="h7_r2" placeholder="2-й">
+                    <input type="number" id="h7_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЛЕГКИЙ ДЕНЬ -->
+    <div id="light" class="day-content">
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">1. Гиря (рывок/жим)</div><div class="ex-target">3х10-12</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l1_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l1_r1" placeholder="1-й">
+                    <input type="number" id="l1_r2" placeholder="2-й">
+                    <input type="number" id="l1_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">2. Румынская тяга</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l2_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l2_r1" placeholder="1-й">
+                    <input type="number" id="l2_r2" placeholder="2-й">
+                    <input type="number" id="l2_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">3. Тяга штанги к поясу</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l3_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l3_r1" placeholder="1-й">
+                    <input type="number" id="l3_r2" placeholder="2-й">
+                    <input type="number" id="l3_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">4. Бабочка / Отжимания</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l4_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l4_r1" placeholder="1-й">
+                    <input type="number" id="l4_r2" placeholder="2-й">
+                    <input type="number" id="l4_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">5. Разведения на лопатки</div><div class="ex-target">3х15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l5_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l5_r1" placeholder="1-й">
+                    <input type="number" id="l5_r2" placeholder="2-й">
+                    <input type="number" id="l5_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">6. Блин вокруг головы</div><div class="ex-target">3х12-15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l6_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l6_r1" placeholder="1-й">
+                    <input type="number" id="l6_r2" placeholder="2-й">
+                    <input type="number" id="l6_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">7. Трицепс на блоке</div><div class="ex-target">3х15</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l7_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l7_r1" placeholder="1-й">
+                    <input type="number" id="l7_r2" placeholder="2-й">
+                    <input type="number" id="l7_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+        <div class="exercise">
+            <div class="ex-header"><div class="ex-title">8. Пресс</div><div class="ex-target">3х15-20</div></div>
+            <div class="inputs-row">
+                <input type="number" class="weight-input" id="l8_w" placeholder="Вес">
+                <div class="reps-group">
+                    <input type="number" id="l8_r1" placeholder="1-й">
+                    <input type="number" id="l8_r2" placeholder="2-й">
+                    <input type="number" id="l8_r3" placeholder="3-й">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="history" class="day-content">
+        <div id="history-list"></div>
+    </div>
+
+    <div class="bottom-panel">
+        <button class="timer-btn" onclick="startTimer(90)">⏱ 1:30</button>
+        <button class="save-btn" onclick="saveData()">💾 Сохранить</button>
+    </div>
+
+    <script>
+        let currentTab = 'heavy';
+        const exerciseNames = {
+            heavy: ["Гакк-присед", "Жим на наклонной", "Тяга верхнего блока", "Брусья", "Махи в кроссовере", "Бицепс гантели", "Гиперэкстензия"],
+            light: ["Гиря", "Румынская тяга", "Тяга штанги к поясу", "Бабочка/Отжимания", "Разведения на лопатки", "Блин вокруг головы", "Трицепс на блоке", "Пресс"]
+        };
+
+        function switchTab(day) {
+            currentTab = day;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.day-content').forEach(c => c.classList.remove('active'));
+            
+            if(day === 'heavy') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('heavy').classList.add('active');
+            } else if(day === 'light') {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('light').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[2].classList.add('active');
+                document.getElementById('history').classList.add('active');
+                renderHistory();
+            }
+        }
+
+        function saveData() {
+            if (currentTab === 'history') return;
+
+            let workoutData = [];
+            let prefix = currentTab === 'heavy' ? 'h' : 'l';
+            let count = currentTab === 'heavy' ? 7 : 8;
+
+            for(let i = 1; i <= count; i++) {
+                let w = document.getElementById(`${prefix}${i}_w`).value;
+                let r1 = document.getElementById(`${prefix}${i}_r1`).value;
+                let r2 = document.getElementById(`${prefix}${i}_r2`).value;
+                let r3 = document.getElementById(`${prefix}${i}_r3`).value;
+                
+                // Если есть вес или хотя бы один подход
+                if (w || r1 || r2 || r3) {
+                    workoutData.push({ 
+                        name: exerciseNames[currentTab][i-1], 
+                        weight: w || '-', 
+                        reps: [r1, r2, r3].filter(val => val !== "") // убираем пустые подходы
+                    });
+                }
+            }
+
+            if (workoutData.length === 0) {
+                alert("Введи хотя бы один результат!");
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+            let now = new Date();
+            let dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+            
+            history.unshift({
+                date: dateStr,
+                type: currentTab === 'heavy' ? 'Тяжелый день' : 'Легкий день',
+                data: workoutData
+            });
+
+            localStorage.setItem('workoutHistory', JSON.stringify(history));
+            localStorage.setItem(`last_${currentTab}`, JSON.stringify(workoutData));
+
+            alert("Тренировка записана! 💪");
+        }
+
+        window.onload = function() {
+            loadLastWorkout('heavy');
+            loadLastWorkout('light');
+        }
+
+        function loadLastWorkout(type) {
+            let prefix = type === 'heavy' ? 'h' : 'l';
+            let lastData = JSON.parse(localStorage.getItem(`last_${type}`));
+            
+            if (lastData && lastData.length > 0) {
+                lastData.forEach((ex, index) => {
+                    let wInput = document.getElementById(`${prefix}${index+1}_w`);
+                    if(wInput) wInput.value = ex.weight !== '-' ? ex.weight : '';
+                    
+                    // Заполняем подходы
+                    if (ex.reps) {
+                        if(document.getElementById(`${prefix}${index+1}_r1`)) document.getElementById(`${prefix}${index+1}_r1`).value = ex.reps[0] || '';
+                        if(document.getElementById(`${prefix}${index+1}_r2`)) document.getElementById(`${prefix}${index+1}_r2`).value = ex.reps[1] || '';
+                        if(document.getElementById(`${prefix}${index+1}_r3`)) document.getElementById(`${prefix}${index+1}_r3`).value = ex.reps[2] || '';
+                    }
+                });
+            }
+        }
+
+        function renderHistory() {
+            let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+            let container = document.getElementById('history-list');
+            
+            if (history.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#8b9eb0;">История пуста.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            history.forEach(workout => {
+                let card = document.createElement('div');
+                card.className = 'history-card';
+                
+                let html = `<div class="history-date">${workout.date} — <span style="color:#e67e22">${workout.type}</span></div>`;
+                
+                workout.data.forEach(ex => {
+                    // Форматируем подходы в строку, например: 10 / 10 / 8
+                    let repsStr = ex.reps.join(' / ');
+                    html += `<div class="history-item">
+                        <span>${ex.name}</span>
+                        <span>${ex.weight} кг × ${repsStr}</span>
+                    </div>`;
+                });
+                
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        let timerInterval;
+        function startTimer(seconds) {
+            const display = document.getElementById('timer-display');
+            let timeLeft = seconds;
+            clearInterval(timerInterval);
+            display.style.display = 'block';
+            display.style.background = '#f39c12';
+            display.innerText = formatTime(timeLeft);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                display.innerText = formatTime(timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    display.innerText = "ОТДЫХ ОКОНЧЕН!";
+                    display.style.background = '#e74c3c';
+                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                    setTimeout(() => { display.style.display = 'none'; }, 3000);
+                }
+            }, 1000);
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
